@@ -40,10 +40,30 @@ In the root folder of this project, run:
 yarn dev
 ```
 
-### Deploy
+## Deploy
 
 ```bash
 yarn deploy
+```
+
+## Endpoints
+
+```bash
+    POST - https://txwiu9toe5.execute-api.us-east-1.amazonaws.com/prod/user
+    GET - https://txwiu9toe5.execute-api.us-east-1.amazonaws.com/prod/user/{id}
+    GET - https://txwiu9toe5.execute-api.us-east-1.amazonaws.com/prod/users
+    PUT - https://txwiu9toe5.execute-api.us-east-1.amazonaws.com/prod/user/{id}
+    DELETE - https://txwiu9toe5.execute-api.us-east-1.amazonaws.com/prod/user/{id}
+```
+
+## Functions
+
+```bash
+    create: optin-api-prod-create
+    getOne: optin-api-prod-getOne
+    getAll: optin-api-prod-getAll
+    update: optin-api-prod-update
+    delete: optin-api-prod-delete
 ```
 
 ## License
