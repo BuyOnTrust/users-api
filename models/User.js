@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     phone: String,
     createdAt: String,
     updatedAt: String,
-    verified: Boolean
+    consent: Boolean
 });
 
 module.exports = mongoose.model('User', UserSchema);
