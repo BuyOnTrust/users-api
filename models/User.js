@@ -26,6 +26,13 @@ const emailValidator = [
     }),
 ]
 
+const phoneValidator = [
+    validate({
+        validator: 'isLength',
+        arguments: [11],
+        message: 'phone should be {ARGS[0]} characters long',
+    }),
+]
 
 const name = new mongoose.Schema({
     first: {
@@ -50,11 +57,13 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true
+        required: true,
+        validate: phoneValidator
     },
     created: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        required: true
     },
     modified: {
         type: Date,

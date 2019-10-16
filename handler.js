@@ -54,14 +54,14 @@ module.exports.getOne = async (event, context) => {
   }
 };
 
-module.exports.getUserByPhone = async (event, context) => {
+module.exports.getUserIdByPhone = async (event, context) => {
   try {
     context.callbackWaitsForEmptyEventLoop = false;
     await connectToDatabase();
     const user = await User.findOne({ 'phone': event.pathParameters.phone });
     return {
       statusCode: 200,
-      body: JSON.stringify(user)
+      body: JSON.stringify(user.id)
     }
   } catch (err) {
     console.log(
