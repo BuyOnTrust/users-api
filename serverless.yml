@@ -45,5 +45,5 @@ functions:
          method: delete
          cors: true
 
-# plugins:
-# - serverless-offline
+plugins:
+- serverless-offline
