@@ -23,6 +23,13 @@ functions:
           path: user/{id}
           method: get
           cors: true
+  getByPhone:
+    handler: handler.getUserByPhone
+    events:
+      - http:
+          path: user/phone/{phone}
+          method: get
+          cors: true
   getAll:
     handler: handler.getAll
     events:

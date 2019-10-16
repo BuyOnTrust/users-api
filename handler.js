@@ -16,7 +16,6 @@ module.exports.create = async (event, context) => {
   } catch (err) {
     console.log(
       'Error creating new User:',
-      'Can’t access ' + options.baseURL + ' response. Blocked by browser?:',
       err
     );
     return {
@@ -42,7 +41,6 @@ module.exports.getOne = async (event, context) => {
   } catch (err) {
     console.log(
       'Error fetching the user:',
-      'Can’t access ' + options.baseURL + ' response. Blocked by browser?:',
       err
     );
     return {
@@ -51,6 +49,31 @@ module.exports.getOne = async (event, context) => {
       body: JSON.stringify(err.message ?
         'Could not fetch the user:' + err.message :
         'Uknown error: Could not fetch the user.'
+      )
+    };
+  }
+};
+
+module.exports.getUserByPhone = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    await connectToDatabase();
+    const user = await User.findOne({ 'phone': event.pathParameters.phone });
+    return {
+      statusCode: 200,
+      body: JSON.stringify(user)
+    }
+  } catch (err) {
+    console.log(
+      'Error fetching the user with phone number:',
+      err
+    );
+    return {
+      statusCode: err.statusCode ? err.statusCode : 500,
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(err.message ?
+        'Could not fetch the user with phone number:' + err.message :
+        'Uknown error: Could not fetch the user with phone number.'
       )
     };
   }
@@ -68,7 +91,6 @@ module.exports.getAll = async (context) => {
   } catch (err) {
     console.log(
       'Error fetching the users:',
-      'Can’t access ' + options.baseURL + ' response. Blocked by browser?:',
       err
     );
     return {
@@ -98,7 +120,6 @@ module.exports.update = async (event, context) => {
   } catch (err) {
     console.log(
       'Error updating the user:',
-      'Can’t access ' + options.baseURL + ' response. Blocked by browser?:',
       err
     );
     return {
@@ -124,7 +145,6 @@ module.exports.delete = async (event, context) => {
   } catch (err) {
     console.log(
       'Error deleting the user:',
-      'Can’t access ' + options.baseURL + ' response. Blocked by browser?:',
       err
     );
     return {
