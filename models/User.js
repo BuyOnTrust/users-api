@@ -45,17 +45,18 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        lowercase: true,
         validate: emailValidator
     },
     phone: {
         type: String,
         required: true
     },
-    createdAt: {
+    created: {
         type: Date,
         default: Date.now
     },
-    updatedAt: {
+    modified: {
         type: Date,
         default: Date.now,
         required: true

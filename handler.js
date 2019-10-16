@@ -108,11 +108,15 @@ module.exports.update = async (event, context) => {
   try {
     context.callbackWaitsForEmptyEventLoop = false;
     await connectToDatabase();
-    const user = await User.findByIdAndUpdate(
+    let updateBody = JSON.parse(event.body);
+    Object.assign(updateBody, { modified: new Date() });
+    
+    let user = await User.findByIdAndUpdate(
       event.pathParameters.id, 
-      JSON.parse(event.body), 
+      updateBody, 
       { new: true }
     );
+    user.updatedAt = new Date();
     return {
       statusCode: 200,
       body: JSON.stringify(user)
