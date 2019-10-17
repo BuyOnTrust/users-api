@@ -11,6 +11,7 @@ module.exports.create = async (event, context) => {
     const user = await User.create(JSON.parse(event.body))
     return {
       statusCode: 200,
+      headers: { 'Access-Control-Allow-Origin': 'https://buyontrust.com' },
       body: JSON.stringify(user)
     }
   } catch (err) {
@@ -36,6 +37,7 @@ module.exports.getOne = async (event, context) => {
     const user = await User.findById(event.pathParameters.id);
     return {
       statusCode: 200,
+      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify(user)
     }
   } catch (err) {
@@ -62,6 +64,7 @@ module.exports.getUserIdByPhone = async (event, context) => {
     if(user) {
       return {
         statusCode: 200,
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           id: user.id,
           consent: user.consent
@@ -70,6 +73,7 @@ module.exports.getUserIdByPhone = async (event, context) => {
     } else {
       return {
         statusCode: 200,
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: 'No user found'
       }
     }
@@ -96,6 +100,7 @@ module.exports.getAll = async (context) => {
     const users = await User.find();
     return {
       statusCode: 200,
+      headers: { 'Access-Control-Allow-Origin': 'https://buyontrust.com' },
       body: JSON.stringify(users)
     }
   } catch (err) {
@@ -129,6 +134,7 @@ module.exports.update = async (event, context) => {
     user.updatedAt = new Date();
     return {
       statusCode: 200,
+      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify(user)
     }
   } catch (err) {
@@ -154,6 +160,7 @@ module.exports.delete = async (event, context) => {
     const user = await User.findByIdAndRemove(event.pathParameters.id);
     return {
       statusCode: 200,
+      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({ message: 'Removed user with id: ' + user._id, user: user })
     }
   } catch (err) {
