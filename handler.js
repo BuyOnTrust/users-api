@@ -59,21 +59,31 @@ module.exports.getUserIdByPhone = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
     await connectToDatabase();
     const user = await User.findOne({ 'phone': event.pathParameters.phone });
-    return {
-      statusCode: 200,
-      body: JSON.stringify(user.id)
+    if(user) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          id: user.id,
+          consent: user.consent
+        })
+      }
+    } else {
+      return {
+        statusCode: 200,
+        body: 'No user found'
+      }
     }
   } catch (err) {
     console.log(
-      'Error fetching the user with phone number:',
+      'Error fetching user by phone number:',
       err
     );
     return {
       statusCode: err.statusCode ? err.statusCode : 500,
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(err.message ?
-        'Could not fetch the user with phone number:' + err.message :
-        'Uknown error: Could not fetch the user with phone number.'
+        'Could not fetch user by phone number:' + err.message :
+        'Uknown error: Could not fetch the user.'
       )
     };
   }
