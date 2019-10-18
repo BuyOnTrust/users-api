@@ -139,8 +139,8 @@ module.exports.update = async (event, context) => {
     );
     
     let response = utils.getResponseObject();
-    Object.assign(response, { body: JSON.stringify(user) });
-    
+    response.data = JSON.stringify(user);
+
     return response;
 
   } catch (err) {

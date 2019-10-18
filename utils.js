@@ -1,6 +1,7 @@
 const getResponseObject = () => {
     return {
-        'Access-Control-Allow-Origin': '*'
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        statusCode: 200,
     };
 };
 
