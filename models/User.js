@@ -29,8 +29,8 @@ const emailValidator = [
 const phoneValidator = [
     validate({
         validator: 'isLength',
-        arguments: [11],
-        message: 'phone should be {ARGS[0]} characters long',
+        arguments: [10,15],
+        message: 'Phone should be between {ARGS[0]} and {ARGS[1]} characters long',
     }),
 ]
 

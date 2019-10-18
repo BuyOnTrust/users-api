@@ -9,7 +9,7 @@ module.exports = connectToDatabase = () => {
     }
 
     console.log('=> using new database connection');
-    return mongoose.connect(process.env.DB)
+    return mongoose.connect(process.env.DB, { useUnifiedTopology: true })
         .then(db => {
             isConnected = db.connections[0].readyState;
         });
