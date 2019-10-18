@@ -139,7 +139,12 @@ module.exports.update = async (event, context) => {
     );
     
     let response = utils.getResponseObject();
-    response.data = JSON.stringify(user);
+    Object.assign(response, {
+      body: JSON.stringify({
+        message: 'Updated user:' + event.pathParameters.id,
+        data: user
+      })
+    });
 
     return response;
 
