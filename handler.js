@@ -60,7 +60,7 @@ module.exports.getOne = async (event, context) => {
   }
 };
 
-module.exports.getUserIdByPhone = async (event, context) => {
+module.exports.getUserByPhone = async (event, context) => {
   try {
     let body;
     context.callbackWaitsForEmptyEventLoop = false;
