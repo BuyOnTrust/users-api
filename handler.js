@@ -68,7 +68,7 @@ module.exports.getUserIdByPhone = async (event, context) => {
     const user = await User.findOne({ 'phone': event.pathParameters.phone });
 
     if(user) {
-      body = JSON.stringify({ id: user.id })
+      body = JSON.stringify({ user })
     } else {
         body = 'No user found';
     };
