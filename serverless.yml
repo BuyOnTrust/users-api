@@ -44,6 +44,20 @@ functions:
          path: user/{id}
          method: put
          cors: true
+  optin:
+    handler: handler.optin
+    events:
+     - http:
+         path: user/optin/{phone}
+         method: put
+         cors: true
+  optout:
+    handler: handler.optout
+    events:
+     - http:
+         path: user/optout/{phone}
+         method: put
+         cors: true
   delete:
     handler: handler.delete
     events:
@@ -52,5 +66,5 @@ functions:
          method: delete
          cors: true
 
-# plugins:
-# - serverless-offline
+plugins:
+- serverless-offline

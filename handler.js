@@ -164,6 +164,109 @@ module.exports.update = async (event, context) => {
   };
 };
 
+module.exports.optin = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    await connectToDatabase();
+
+    const user = await User.findOne({ 'phone': event.pathParameters.phone });
+
+    let updateBody;
+    let response = utils.getResponseObject();
+
+    if (user) {
+      updateBody = {
+        consent: true,
+        modified: new Date()
+      }
+
+      const updateUser = await User.findByIdAndUpdate(
+        user.id,
+        updateBody,
+        { new: true }
+      );
+
+      Object.assign(response, {
+        body: JSON.stringify({
+          message: 'Updated user:' + user.id,
+          data: updateUser
+        })
+      });
+
+    } else {
+      updateBody = 'No user found'
+      Object.assign(response, { updateBody });
+    };
+    return response;
+
+  } catch (err) {
+    console.log(
+      'Error updating the user consent:',
+      err
+    );
+    return {
+      statusCode: err.statusCode ? err.statusCode : 500,
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(err.message ?
+        'Could not update the user consent:' + err.message :
+        'Uknown error: Could not update the user consent.'
+      )
+    };
+  };
+};
+
+module.exports.optout = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    await connectToDatabase();
+
+    const user = await User.findOne({ 'phone': event.pathParameters.phone });
+
+    let updateBody;
+    let response = utils.getResponseObject();
+
+    if (user) {
+      updateBody = {
+        consent: false,
+        modified: new Date()
+      }
+
+      const updateUser = await User.findByIdAndUpdate(
+        user.id,
+        updateBody,
+        { new: true }
+      );
+
+      Object.assign(response, {
+        body: JSON.stringify({
+          message: 'Updated user:' + user.id,
+          data: updateUser
+        })
+      });
+
+    } else {
+      updateBody = 'No user found'
+      Object.assign(response, { updateBody });
+    };
+
+    return response;
+
+  } catch (err) {
+    console.log(
+      'Error updating the user:',
+      err
+    );
+    return {
+      statusCode: err.statusCode ? err.statusCode : 500,
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(err.message ?
+        'Could not update the user:' + err.message :
+        'Uknown error: Could not update the user.'
+      )
+    };
+  };
+};
+
 module.exports.delete = async (event, context) => {
   try {
     context.callbackWaitsForEmptyEventLoop = false;
