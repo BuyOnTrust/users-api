@@ -26,8 +26,8 @@ module.exports.create = async (event, context) => {
       statusCode: err.statusCode ? err.statusCode : 500,
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(err.message ? 
-        'Could not create the user:' + err.message : 
-        'Uknown error: Could not create the user.'
+        'Could not create new user:' + err.message : 
+        'Uknown error: Could not create new user.'
         )
     };
   }
@@ -68,10 +68,7 @@ module.exports.getUserIdByPhone = async (event, context) => {
     const user = await User.findOne({ 'phone': event.pathParameters.phone });
 
     if(user) {
-      body = JSON.stringify({
-        id: user.id,
-        consent: user.consent
-      })
+      body = JSON.stringify({ id: user.id })
     } else {
         body = 'No user found';
     };

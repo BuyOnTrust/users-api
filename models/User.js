@@ -73,6 +73,9 @@ const UserSchema = new mongoose.Schema({
     consent: {
         type: Boolean,
         required: true
+    },
+    clickId: {
+        type: Number
     }
 });
 
