@@ -264,6 +264,66 @@ module.exports.optout = async (event, context) => {
   };
 };
 
+module.exports.updatePreapprovalByPhone = async (event, context) => {
+  try {
+    context.callbackWaitsForEmptyEventLoop = false;
+    await connectToDatabase();
+
+    const user = await User.findOne({ 'phone': event.pathParameters.phone });
+
+    let updateBody;
+    let eventData = JSON.parse(event.body)
+    let response = utils.getResponseObject();
+
+    if (user) {
+      updateBody = {
+        campaign: {
+          status: {
+            isApproved: eventData.appStatus === 'Approved' ? true : false,
+            approvalAmount: eventData.approvalAmount,
+            applicationId: eventData.applicationId,
+            approvalUsed: eventData.approvalUsed
+          }
+        },
+        modified: new Date()
+      }
+
+      const updateUser = await User.findByIdAndUpdate(
+        user.id,
+        updateBody,
+        { new: true }
+      );
+
+      Object.assign(response, {
+        body: JSON.stringify({
+          message: 'Updated user:' + user.id,
+          data: updateUser
+        })
+      });
+
+    } else {
+      updateBody = 'No user found'
+      Object.assign(response, { updateBody });
+    };
+
+    return response;
+
+  } catch (err) {
+    console.log(
+      'Error updating the user:',
+      err
+    );
+    return {
+      statusCode: err.statusCode ? err.statusCode : 500,
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(err.message ?
+        'Could not update the user:' + err.message :
+        'Uknown error: Could not update the user.'
+      )
+    };
+  };
+};
+
 module.exports.delete = async (event, context) => {
   try {
     context.callbackWaitsForEmptyEventLoop = false;

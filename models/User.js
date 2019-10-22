@@ -47,6 +47,15 @@ const name = new mongoose.Schema({
     }
 }, { _id: false, autoIndex: false });
 
+const campaign = new mongoose.Schema({
+    status: { 
+        approved: Boolean,
+        approvalAmount: Number,
+        applicationId: String,
+        approvalUsed: String 
+    }
+}, { _id: false, autoIndex: false });
+
 const UserSchema = new mongoose.Schema({
     name: name,
     email: {
@@ -75,7 +84,8 @@ const UserSchema = new mongoose.Schema({
     },
     clickId: {
         type: Number
-    }
+    },
+    campaign: campaign
 });
 
 module.exports = mongoose.model('User', UserSchema);

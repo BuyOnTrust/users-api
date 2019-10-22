@@ -44,6 +44,13 @@ functions:
          path: user/{id}
          method: put
          cors: true
+  updatePreapproval:
+    handler: handler.updatePreapprovalByPhone
+    events:
+     - http:
+         path: user/preapproval/{phone}
+         method: put
+         cors: true
   optin:
     handler: handler.optin
     events:
