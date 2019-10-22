@@ -34,7 +34,6 @@ export async function consentByPhone(event, context) {
         const user = await User.findOne({ 'phone': event.pathParameters.phone });
 
         if (user) {
-
             const updateUserConsent = await User.findByIdAndUpdate(
                 user.id,
                 updateBody,
