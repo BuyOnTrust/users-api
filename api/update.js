@@ -24,7 +24,7 @@ export async function byId(event, context) {
 
 export async function consentByPhone(event, context) {
     context.callbackWaitsForEmptyEventLoop = false;
-    const data = JSON.parse(event.body)
+    const data = JSON.parse(event.body);
     try {
         let updateBody = {
             consent: data.consent,
