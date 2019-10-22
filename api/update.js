@@ -31,20 +31,17 @@ export async function consentByPhone(event, context) {
             modified: new Date()
         };
         await connectToDatabase();
-        const user = await User.findOne({ 'phone': event.pathParameters.phone });
+        const user = await User.findOneAndUpdate(
+            { 'phone': event.pathParameters.phone },
+            updateBody,
+            { omitUndefined: true }
+        );
 
-        if (user) {
-            const updateUserConsent = await User.findByIdAndUpdate(
-                user.id,
-                updateBody,
-                { new: true }
-            );
-            return success(updateUserConsent);
-        } else {
-            return success('No user found');
-        };
+        return user ? success(user) : success('No user found');
+
     } catch (err) {
         console.log('Error getting User by ID:', err);
         return failure({ status: false });
     }
 }
+

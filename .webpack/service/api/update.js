@@ -136,20 +136,12 @@ async function consentByPhone(event, context) {
       modified: new Date()
     };
     await Object(_db__WEBPACK_IMPORTED_MODULE_1__["default"])();
-    const user = await _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
+    const user = await _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].findOneAndUpdate({
       'phone': event.pathParameters.phone
+    }, updateBody, {
+      omitUndefined: true
     });
-
-    if (user) {
-      const updateUserConsent = await _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].findByIdAndUpdate(user.id, updateBody, {
-        new: true
-      });
-      return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])(updateUserConsent);
-    } else {
-      return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])('No user found');
-    }
-
-    ;
+    return user ? Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])(user) : Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])('No user found');
   } catch (err) {
     console.log('Error getting User by ID:', err);
     return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["failure"])({
