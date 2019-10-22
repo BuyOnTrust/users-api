@@ -113,7 +113,7 @@ async function removeById(event, context) {
     const user = await _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].findByIdAndRemove(event.pathParameters.id);
     return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])(user);
   } catch (err) {
-    console.log('Error creating new User:', err);
+    console.log('Error deleting User:', err);
     return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["failure"])({
       status: false
     });
@@ -164,16 +164,44 @@ async function connectToDatabase() {
 /*!**********************************************************************************!*\
   !*** /Users/admin/Code/work/repos/BuyOnTrust/api/users-api/libs/response-lib.js ***!
   \**********************************************************************************/
-/*! exports provided: success, failure */
+/*! exports provided: updateBody, success, failure */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateBody", function() { return updateBody; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "success", function() { return success; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "failure", function() { return failure; });
 /* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! source-map-support/register */ "../../source-map-support/register.js");
 /* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(source_map_support_register__WEBPACK_IMPORTED_MODULE_0__);
 
+function updateBody(key_name, data) {
+  switch (key_name) {
+    case "CONSENT":
+      return {
+        meta: {
+          consent: data.consent
+        },
+        modified: new Date()
+      };
+
+    case "APPROVAL":
+      return {
+        meta: {
+          approval: data
+        },
+        modified: new Date()
+      };
+
+    case "CHECKOUT":
+      return {
+        meta: {
+          checkout: data
+        },
+        modified: new Date()
+      };
+  }
+}
 function success(body) {
   return buildResponse(200, body);
 }
@@ -248,19 +276,7 @@ const name = new mongoose.Schema({
   _id: false,
   autoIndex: false
 });
-const campaign = new mongoose.Schema({
-  status: {
-    approved: Boolean,
-    approvalAmount: Number,
-    applicationId: String,
-    approvalUsed: String
-  }
-}, {
-  _id: false,
-  autoIndex: false
-});
-const UserSchema = new mongoose.Schema({
-  name: name,
+const contact = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -271,7 +287,52 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: phoneValidator
-  },
+  }
+}, {
+  _id: false,
+  autoIndex: false
+});
+const consentObj = {
+  consent: Boolean,
+  optin_date: Date
+};
+const approvalObj = new mongoose.Schema({
+  application_id: String,
+  app_status: String,
+  approval_amount: String,
+  approval_used: String,
+  approval_date: Date
+}, {
+  _id: false,
+  autoIndex: false
+});
+const checkoutObj = new mongoose.Schema({
+  lease_id: String,
+  checkout_token: String,
+  checkout_date: Date
+}, {
+  _id: false,
+  autoIndex: false
+});
+const trackingObj = new mongoose.Schema({
+  clickId: Number
+}, {
+  _id: false,
+  autoIndex: false
+});
+const meta = new mongoose.Schema({
+  consent: consentObj,
+  approval: approvalObj,
+  checkout: checkoutObj,
+  tracking: trackingObj
+}, {
+  _id: false,
+  autoIndex: false
+});
+const UserSchema = new mongoose.Schema({
+  name,
+  contact,
+  meta,
   created: {
     type: Date,
     default: Date.now,
@@ -281,14 +342,7 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     required: true
-  },
-  consent: {
-    type: Boolean
-  },
-  clickId: {
-    type: Number
-  },
-  campaign: campaign
+  }
 });
 /* harmony default export */ __webpack_exports__["default"] = (mongoose.model('User', UserSchema));
 

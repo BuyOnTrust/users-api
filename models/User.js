@@ -47,17 +47,7 @@ const name = new mongoose.Schema({
     }
 }, { _id: false, autoIndex: false });
 
-const campaign = new mongoose.Schema({
-    status: {
-        approved: Boolean,
-        approvalAmount: Number,
-        applicationId: String,
-        approvalUsed: String
-    }
-}, { _id: false, autoIndex: false });
-
-const UserSchema = new mongoose.Schema({
-    name: name,
+const contact = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -69,6 +59,42 @@ const UserSchema = new mongoose.Schema({
         required: true,
         validate: phoneValidator
     },
+}, { _id: false, autoIndex: false });
+
+const consentObj = {
+    consent: Boolean,
+    optin_date: Date
+};
+
+const approvalObj = new mongoose.Schema({
+    application_id: String,
+    app_status: String,
+    approval_amount: String,
+    approval_used: String,
+    approval_date: Date
+}, { _id: false, autoIndex: false });
+
+const checkoutObj = new mongoose.Schema({
+    lease_id: String,
+    checkout_token: String,
+    checkout_date: Date
+}, { _id: false, autoIndex: false });
+
+const trackingObj = new mongoose.Schema({
+    clickId: Number
+}, { _id: false, autoIndex: false });
+
+const meta = new mongoose.Schema({
+    consent: consentObj,
+    approval: approvalObj,
+    checkout: checkoutObj,
+    tracking: trackingObj
+}, { _id: false, autoIndex: false });
+
+const UserSchema = new mongoose.Schema({
+    name,
+    contact,
+    meta,
     created: {
         type: Date,
         default: Date.now,
@@ -78,14 +104,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         required: true
-    },
-    consent: {
-        type: Boolean
-    },
-    clickId: {
-        type: Number
-    },
-    campaign: campaign
+    }
 });
 
 export default mongoose.model('User', UserSchema);

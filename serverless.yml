@@ -64,6 +64,20 @@ functions:
          path: api/consent/{phone}
          method: put
          cors: true
+  capturePreapproval:
+    handler: api/update.capturePreapproval
+    events:
+     - http:
+         path: api/capture/preapproval/{phone}
+         method: put
+         cors: true
+  captureCheckout:
+    handler: api/update.captureCheckout
+    events:
+     - http:
+         path: api/capture/checkout/{phone}
+         method: put
+         cors: true
   deleteById:
     handler: api/delete.removeById
     events:

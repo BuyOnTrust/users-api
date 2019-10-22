@@ -9,7 +9,7 @@ export async function removeById(event, context) {
         const user = await User.findByIdAndRemove(event.pathParameters.id);
         return success(user);
     } catch (err) {
-        console.log('Error creating new User:', err);
+        console.log('Error deleting User:', err);
         return failure({ status: false });
     }
 }

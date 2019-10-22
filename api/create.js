@@ -9,7 +9,7 @@ export async function newUser(event, context) {
     try {
         await connectToDatabase();
         const response = await User.create(data);
-        return success(response.data);
+        return success(response);
     } catch (err) {
         console.log('Error creating new User:', err);
         return failure({ status: false });
