@@ -1,4 +1,17 @@
-service: optin-api
+service: users-api
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  environment:
+    DB: ${env:DB_CONNECTION_STRING}
 
 provider:
   name: aws
@@ -9,69 +22,52 @@ provider:
   region: us-east-1
 
 functions:
-  create:
-    handler: handler.create
+  createUser:
+    handler: api/create.newUser
     events:
       - http:
-          path: user
+          path: api/user
           method: post
           cors: true
   getOne:
-    handler: handler.getOne
+    handler: api/get.getOne
     events:
       - http:
-          path: user/{id}
+          path: api/user/{id}
           method: get
           cors: true
   getUserByPhone:
-    handler: handler.getUserByPhone
+    handler: api/get.getUserByPhone
     events:
       - http:
-          path: user/phone/{phone}
+          path: api/phone/{phone}
           method: get
           cors: true
   getAll:
-    handler: handler.getAll
+    handler: api/get.getAllUsers
     events:
      - http:
-         path: users
+         path: api/users
          method: get
          cors: true
-  update:
-    handler: handler.update
+  updateById:
+    handler: api/update.byId
     events:
      - http:
-         path: user/{id}
+         path: api/user/{id}
          method: put
          cors: true
-  updatePreapproval:
-    handler: handler.updatePreapprovalByPhone
+  updateConsent:
+    handler: api/update.consentByPhone
     events:
      - http:
-         path: user/preapproval/{phone}
+         path: api/consent/{phone}
          method: put
          cors: true
-  optin:
-    handler: handler.optin
-    events:
-     - http:
-         path: user/optin/{phone}
-         method: put
-         cors: true
-  optout:
-    handler: handler.optout
-    events:
-     - http:
-         path: user/optout/{phone}
-         method: put
-         cors: true
-  delete:
-    handler: handler.delete
+  deleteById:
+    handler: api/delete.removeById
     events:
      - http:
          path: user/{id}
          method: delete
          cors: true
-
-# plugins:
-# - serverless-offline

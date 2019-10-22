@@ -24,7 +24,7 @@ const emailValidator = [
         arguments: [6, 50],
         message: 'Email should be between {ARGS[0]} and {ARGS[1]} characters',
     }),
-]
+];
 
 const phoneValidator = [
     validate({
@@ -32,7 +32,7 @@ const phoneValidator = [
         arguments: [10,15],
         message: 'Phone should be between {ARGS[0]} and {ARGS[1]} characters long',
     }),
-]
+];
 
 const name = new mongoose.Schema({
     first: {
@@ -48,11 +48,11 @@ const name = new mongoose.Schema({
 }, { _id: false, autoIndex: false });
 
 const campaign = new mongoose.Schema({
-    status: { 
+    status: {
         approved: Boolean,
         approvalAmount: Number,
         applicationId: String,
-        approvalUsed: String 
+        approvalUsed: String
     }
 }, { _id: false, autoIndex: false });
 
@@ -88,4 +88,4 @@ const UserSchema = new mongoose.Schema({
     campaign: campaign
 });
 
-module.exports = mongoose.model('User', UserSchema);
+export default mongoose.model('User', UserSchema);
