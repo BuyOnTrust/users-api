@@ -9,7 +9,7 @@ async function connectToDatabase() {
     }
 
     console.log('=> using new database connection');
-    const db = await mongoose.connect(process.env.DB_CONNECTION_STRING, { 
+    const db = await mongoose.connect(process.env.DB_CONNECTION_STRING, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
         useFindAndModify: false

@@ -68,6 +68,6 @@ functions:
     handler: api/delete.removeById
     events:
      - http:
-         path: user/{id}
+         path: api/user/{id}
          method: delete
          cors: true
