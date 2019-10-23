@@ -18,7 +18,7 @@ export async function getUserByPhone(event, context) {
     context.callbackWaitsForEmptyEventLoop = false;
     try {
         await connectToDatabase();
-        const user = await User.findOne({ 'contact.phone': event.pathParameters.phone });
+        const user = await User.findOne({ 'phone': event.pathParameters.phone });
         return user ? success(user) : success('No user found');
     } catch (err) {
         console.log('Error getting User by Phone:', err);

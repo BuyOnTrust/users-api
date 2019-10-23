@@ -47,20 +47,6 @@ const name = new mongoose.Schema({
     }
 }, { _id: false, autoIndex: false });
 
-const contact = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        lowercase: true,
-        validate: emailValidator
-    },
-    phone: {
-        type: String,
-        required: true,
-        validate: phoneValidator
-    },
-}, { _id: false, autoIndex: false });
-
 const consentObj = {
     consent: Boolean,
     optin_date: Date
@@ -80,21 +66,23 @@ const checkoutObj = new mongoose.Schema({
     checkout_date: Date
 }, { _id: false, autoIndex: false });
 
-const trackingObj = new mongoose.Schema({
-    clickId: Number
-}, { _id: false, autoIndex: false });
-
-const meta = new mongoose.Schema({
-    consent: consentObj,
-    approval: approvalObj,
-    checkout: checkoutObj,
-    tracking: trackingObj
-}, { _id: false, autoIndex: false });
-
 const UserSchema = new mongoose.Schema({
     name,
-    contact,
-    meta,
+    email: {
+        type: String,
+        required: true,
+        lowercase: true,
+        validate: emailValidator
+    },
+    phone: {
+        type: String,
+        required: true,
+        validate: phoneValidator
+    },
+    optin: consentObj,
+    approval: approvalObj,
+    checkout: checkoutObj,
+    clickId: Number,
     created: {
         type: Date,
         default: Date.now,

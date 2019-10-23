@@ -127,7 +127,7 @@ async function getUserByPhone(event, context) {
   try {
     await Object(_db__WEBPACK_IMPORTED_MODULE_1__["default"])();
     const user = await _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].findOne({
-      'contact.phone': event.pathParameters.phone
+      'phone': event.pathParameters.phone
     });
     return user ? Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])(user) : Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])('No user found');
   } catch (err) {
@@ -211,25 +211,19 @@ function updateBody(key_name, data) {
   switch (key_name) {
     case "CONSENT":
       return {
-        meta: {
-          consent: data.consent
-        },
+        optin: data,
         modified: new Date()
       };
 
     case "APPROVAL":
       return {
-        meta: {
-          approval: data
-        },
+        approval: data,
         modified: new Date()
       };
 
     case "CHECKOUT":
       return {
-        meta: {
-          checkout: data
-        },
+        checkout: data,
         modified: new Date()
       };
   }
@@ -308,22 +302,6 @@ const name = new mongoose.Schema({
   _id: false,
   autoIndex: false
 });
-const contact = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-    validate: emailValidator
-  },
-  phone: {
-    type: String,
-    required: true,
-    validate: phoneValidator
-  }
-}, {
-  _id: false,
-  autoIndex: false
-});
 const consentObj = {
   consent: Boolean,
   optin_date: Date
@@ -346,25 +324,23 @@ const checkoutObj = new mongoose.Schema({
   _id: false,
   autoIndex: false
 });
-const trackingObj = new mongoose.Schema({
-  clickId: Number
-}, {
-  _id: false,
-  autoIndex: false
-});
-const meta = new mongoose.Schema({
-  consent: consentObj,
-  approval: approvalObj,
-  checkout: checkoutObj,
-  tracking: trackingObj
-}, {
-  _id: false,
-  autoIndex: false
-});
 const UserSchema = new mongoose.Schema({
   name,
-  contact,
-  meta,
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
+    validate: emailValidator
+  },
+  phone: {
+    type: String,
+    required: true,
+    validate: phoneValidator
+  },
+  optin: consentObj,
+  approval: approvalObj,
+  checkout: checkoutObj,
+  clickId: Number,
   created: {
     type: Date,
     default: Date.now,

@@ -11,7 +11,7 @@ export async function byId(event, context) {
         await connectToDatabase();
         let user = await User.findByIdAndUpdate(
             event.pathParameters.id,
-            { $set: updateBody },
+            updateBody,
             { new: true }
         );
 
@@ -25,15 +25,17 @@ export async function byId(event, context) {
 
 export async function consentByPhone(event, context) {
     context.callbackWaitsForEmptyEventLoop = false;
-    const queryPhone = { 'contact.phone': event.pathParameters.phone };
+    const queryPhone = { 'phone': event.pathParameters.phone };
     const data = JSON.parse(event.body);
     Object.assign(data, { optin_date: new Date() });
+    console.log(typeof data.consent);
     const put = updateBody('CONSENT', data);
+
     try {
         await connectToDatabase();
         const user = await User.findOneAndUpdate(
             queryPhone,
-            { $set: put },
+            put,
             { new: true }
         );
 
@@ -47,7 +49,7 @@ export async function consentByPhone(event, context) {
 
 export async function capturePreapproval(event, context) {
     context.callbackWaitsForEmptyEventLoop = false;
-    const queryPhone = { 'contact.phone': event.pathParameters.phone };
+    const queryPhone = { 'phone': event.pathParameters.phone };
     const data = JSON.parse(event.body);
     Object.assign(data, { approval_date: new Date() });
     const put = updateBody('APPROVAL', data);
@@ -56,8 +58,8 @@ export async function capturePreapproval(event, context) {
         await connectToDatabase();
         const user = await User.findOneAndUpdate(
             queryPhone,
-            { $set: put },
-            { new: true }
+            put,
+            { new: true, omitUndefined: true }
         );
 
         return user ? success(user) : success('No user found');
@@ -70,19 +72,17 @@ export async function capturePreapproval(event, context) {
 
 export async function captureCheckout(event, context) {
     context.callbackWaitsForEmptyEventLoop = false;
-    const queryPhone = { 'contact.phone': event.pathParameters.phone };
+    const queryPhone = { 'phone': event.pathParameters.phone };
     const data = JSON.parse(event.body);
     Object.assign(data, { checkout_date: new Date() });
     const put = updateBody('CHECKOUT', data);
-    console.log('query:', queryPhone);
-    console.log('data:', data);
-    console.log('put:', put);
+
     try {
         await connectToDatabase();
         const user = await User.findOneAndUpdate(
             queryPhone,
-            { $set: { meta.checkout: put }},
-            { new: true }
+            put,
+            { new: true, omitUndefined: true }
         );
 
         return user ? success(user) : success('No user found');

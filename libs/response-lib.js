@@ -2,17 +2,17 @@ export function updateBody(key_name, data) {
     switch (key_name) {
         case "CONSENT":
             return {
-                meta: { consent: data.consent },
+                optin: data,
                 modified: new Date()
             };
         case "APPROVAL":
             return {
-                meta: { approval: data },
+                approval: data,
                 modified: new Date()
             };
         case "CHECKOUT":
             return {
-                meta: { checkout: data },
+                checkout: data,
                 modified: new Date()
             };
     }
