@@ -34,7 +34,7 @@ const phoneValidator = [
     }),
 ];
 
-const name = new mongoose.Schema({
+const nameObj = new mongoose.Schema({
     first: {
         type: String,
         required: true,
@@ -47,15 +47,15 @@ const name = new mongoose.Schema({
     }
 }, { _id: false, autoIndex: false });
 
-const consentObj = {
+const consentObj = new mongoose.Schema({
     consent: Boolean,
     optin_date: Date
-};
+}, { _id: false, autoIndex: false });
 
 const approvalObj = new mongoose.Schema({
     application_id: String,
     app_status: String,
-    approval_amount: String,
+    approval_amount: Number,
     approval_used: String,
     approval_date: Date
 }, { _id: false, autoIndex: false });
@@ -63,26 +63,29 @@ const approvalObj = new mongoose.Schema({
 const checkoutObj = new mongoose.Schema({
     lease_id: String,
     checkout_token: String,
+    order_id: Number,
+    store_id: Number,
     checkout_date: Date
 }, { _id: false, autoIndex: false });
 
 const UserSchema = new mongoose.Schema({
-    name,
+    name: nameObj,
     email: {
         type: String,
-        required: true,
         lowercase: true,
         validate: emailValidator
     },
     phone: {
         type: String,
-        required: true,
         validate: phoneValidator
     },
     optin: consentObj,
     approval: approvalObj,
     checkout: checkoutObj,
-    clickId: Number,
+    clickId: {
+        type: Number,
+        default: 0
+    },
     created: {
         type: Date,
         default: Date.now,

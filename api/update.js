@@ -28,7 +28,6 @@ export async function consentByPhone(event, context) {
     const queryPhone = { 'phone': event.pathParameters.phone };
     const data = JSON.parse(event.body);
     Object.assign(data, { optin_date: new Date() });
-    console.log(typeof data.consent);
     const put = updateBody('CONSENT', data);
 
     try {
@@ -59,7 +58,7 @@ export async function capturePreapproval(event, context) {
         const user = await User.findOneAndUpdate(
             queryPhone,
             put,
-            { new: true, omitUndefined: true }
+            { new: true }
         );
 
         return user ? success(user) : success('No user found');
@@ -82,7 +81,7 @@ export async function captureCheckout(event, context) {
         const user = await User.findOneAndUpdate(
             queryPhone,
             put,
-            { new: true, omitUndefined: true }
+            { new: true }
         );
 
         return user ? success(user) : success('No user found');
