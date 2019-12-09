@@ -56,12 +56,13 @@ const approvalObj = new mongoose.Schema({
     application_id: String,
     app_status: String,
     approval_amount: Number,
-    approval_used: String,
+    approval_used: Boolean,
     approval_date: Date
 }, { _id: false, autoIndex: false });
 
 const checkoutObj = new mongoose.Schema({
     lease_id: String,
+    lease_number: Number,
     checkout_token: String,
     order_id: Number,
     store_id: Number,
