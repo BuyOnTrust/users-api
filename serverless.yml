@@ -50,6 +50,13 @@ functions:
          path: api/users
          method: get
          cors: true
+  getApprovedEmail:
+    handler: api/get.getApprovedEmails
+    events:
+     - http:
+         path: api/users/approved/emails
+         method: get
+         cors: true
   updateById:
     handler: api/update.byId
     events:

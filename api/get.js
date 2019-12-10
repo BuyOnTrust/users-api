@@ -37,3 +37,18 @@ export async function getAllUsers(context) {
         return failure({ status: false });
     }
 }
+
+export async function getApprovedEmails(context) {
+    context.callbackWaitsForEmptyEventLoop = false;
+    try {
+        await connectToDatabase();
+        const users = await User.find({
+            'approval.app_status': 'Approved'
+        }, '-_id email');
+        let flatList = users.map((item) => item.email);
+        return success(flatList);
+    } catch (err) {
+        console.log('Error getting all users:', err);
+        return failure({ status: false });
+    }
+}
