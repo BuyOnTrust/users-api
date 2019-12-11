@@ -22,6 +22,7 @@ provider:
   region: us-east-1
 
 functions:
+# CREATE
   createUser:
     handler: api/create.newUser
     events:
@@ -29,6 +30,7 @@ functions:
           path: api/user
           method: post
           cors: true
+# READ
   getOne:
     handler: api/get.getOne
     events:
@@ -57,6 +59,14 @@ functions:
          path: api/users/approved/emails
          method: get
          cors: true
+  getApprovedBasic:
+    handler: api/get.getApprovedBasic
+    events:
+     - http:
+         path: api/users/approved/basic
+         method: get
+         cors: true
+# UPDATE
   updateById:
     handler: api/update.byId
     events:
@@ -85,6 +95,7 @@ functions:
          path: api/capture/checkout/{phone}
          method: put
          cors: true
+# DELETE
   deleteById:
     handler: api/delete.removeById
     events:

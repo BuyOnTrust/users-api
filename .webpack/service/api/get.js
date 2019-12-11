@@ -90,7 +90,7 @@
 /*!************************************************************************!*\
   !*** /Users/admin/Code/work/repos/BuyOnTrust/api/users-api/api/get.js ***!
   \************************************************************************/
-/*! exports provided: getOne, getUserByPhone, getAllUsers, getApprovedEmails */
+/*! exports provided: getOne, getUserByPhone, getAllUsers, getApprovedEmails, getApprovedBasic */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -99,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUserByPhone", function() { return getUserByPhone; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllUsers", function() { return getAllUsers; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getApprovedEmails", function() { return getApprovedEmails; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getApprovedBasic", function() { return getApprovedBasic; });
 /* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! source-map-support/register */ "../../source-map-support/register.js");
 /* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(source_map_support_register__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _db__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../db */ "../../../db.js");
@@ -161,6 +162,30 @@ async function getApprovedEmails(context) {
       'approval.app_status': 'Approved'
     }, '-_id email');
     let flatList = users.map(item => item.email);
+    return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])(flatList);
+  } catch (err) {
+    console.log('Error getting all users:', err);
+    return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["failure"])({
+      status: false
+    });
+  }
+}
+async function getApprovedBasic(context) {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  try {
+    await Object(_db__WEBPACK_IMPORTED_MODULE_1__["default"])();
+    const users = await _models_User__WEBPACK_IMPORTED_MODULE_2__["default"].find({
+      'approval.app_status': 'Approved'
+    }, '-_id email approval.approval_amount approval.approval_date');
+    let flatList = users.map(item => {
+      let formattedAmount = (item.approval.approval_amount / 100).toString();
+      return {
+        email: item.email,
+        amount: '$' + formattedAmount,
+        date: item.approval.approval_date
+      };
+    });
     return Object(_libs_response_lib__WEBPACK_IMPORTED_MODULE_3__["success"])(flatList);
   } catch (err) {
     console.log('Error getting all users:', err);

@@ -52,3 +52,25 @@ export async function getApprovedEmails(context) {
         return failure({ status: false });
     }
 }
+
+export async function getApprovedBasic(context) {
+    context.callbackWaitsForEmptyEventLoop = false;
+    try {
+        await connectToDatabase();
+        const users = await User.find({
+            'approval.app_status': 'Approved'
+        }, '-_id email approval.approval_amount approval.approval_date');
+        let flatList = users.map((item) => {
+            let formattedAmount = (item.approval.approval_amount / 100).toString();
+            return {
+                email: item.email,
+                amount: '$' + formattedAmount,
+                date: item.approval.approval_date
+            };
+        });
+        return success(flatList);
+    } catch (err) {
+        console.log('Error getting all users:', err);
+        return failure({ status: false });
+    }
+}
